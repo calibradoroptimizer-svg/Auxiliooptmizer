@@ -1,0 +1,21 @@
+{
+      "name": "auxilio-v6",
+        "version": "6.0.0",
+          "description": "Sistema Auxilio V6.0 com API completa",
+            "main": "index.html",
+              "scripts": {
+                  "build": "echo 'Build process completed'",
+                      "dev": "netlify dev"
+                        },
+                          "keywords": [
+                              "auxilio",
+                                  "gaming",
+                                      "calibration"
+                                        ],
+                                          "author": "Seu Nome",
+                                            "license": "MIT",
+                                              "dependencies": {},
+                                                "devDependencies": {
+                                                    "netlify-cli": "^17.0.0"
+                                                      }
+}
