@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auxilio V6.0 - Sistema Avançado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 150, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #00ff88;
+            color: #000;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 150, 255, 0.4);
+            border-color: rgba(0, 150, 255, 0.6);
+        }
+
+        .card h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 1.5em;
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #00d4ff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #00d4ff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            margin: 10px 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #00d4ff;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toggle-item:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .info-text {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 10px;
+        }
+
+        .value-display {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ AUXILIO V6.0</h1>
+            <div class="status-badge" id="statusBadge">● CONECTADO</div>
+        </div>
+
+        <div class="grid">
+            <!-- Calibrador de Botão -->
+            <div class="card">
+                <h3><span class="icon">🎯</span> Calibrador de Botão</h3>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Velocidade</span>
+                        <span class="value-display" id="btnSpeed">50%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="slider" id="btnSpeedSlider">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Precisão</span>
+                        <span class="value-display" id="btnPrecision">70%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="70" class="slider" id="btnPrecisionSlider">
+                </div>
+                <button class="btn" onclick="applyButtonCalibration()">Aplicar Calibração</button>
+            </div>
+
+            <!-- Calibrador de Sensi -->
+            <div class="card">
+                <h3><span class="icon">🎮</span> Calibrador de Sensi</h3>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Sensi Geral</span>
+                        <span class="value-display" id="sensiGeneral">50%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="slider" id="sensiGeneralSlider">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Sensi Mira</span>
+                        <span class="value-display" id="sensiAim">45%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="45" class="slider" id="sensiAimSlider">
+                </div>
+                <button class="btn" onclick="applySensiCalibration()">Aplicar Sensibilidade</button>
+            </div>
+
+            <!-- Calibrador de Mira -->
+            <div class="card">
+                <h3><span class="icon">🔫</span> Calibrador de Mira</h3>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Suavização</span>
+                        <span class="value-display" id="aimSmooth">60%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="60" class="slider" id="aimSmoothSlider">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>FOV (Campo)</span>
+                        <span class="value-display" id="aimFov">80%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="80" class="slider" id="aimFovSlider">
+                </div>
+                <button class="btn" onclick="applyAimCalibration()">Aplicar Mira</button>
+            </div>
+
+            <!-- Calibrador de Tela -->
+            <div class="card">
+                <h3><span class="icon">📱</span> Calibrador de Tela</h3>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Resolução</span>
+                        <span class="value-display" id="screenRes">1080p</span>
+                    </div>
+                    <input type="range" min="0" max="2" value="1" class="slider" id="screenResSlider">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Taxa de Atualização</span>
+                        <span class="value-display" id="refreshRate">60Hz</span>
+                    </div>
+                    <input type="range" min="30" max="120" value="60" step="30" class="slider" id="refreshRateSlider">
+                </div>
+                <button class="btn" onclick="applyScreenCalibration()">Aplicar Tela</button>
+            </div>
+
+            <!-- Recursos Avançados -->
+            <div class="card">
+                <h3><span class="icon">⚙️</span> Recursos Avançados</h3>
+                
+                <div class="toggle-item">
+                    <span>NoRecoil 50%</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="norecoil">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <span>Aimbot Legit</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="aimbotLegit">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <span>Aimbot AP</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="aimbotAP">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="applyAdvancedFeatures()">Aplicar Recursos</button>
+            </div>
+
+            <!-- Estabilização -->
+            <div class="card">
+                <h3><span class="icon">🛡️</span> Estabilização</h3>
+                
+                <div class="toggle-item">
+                    <span>Não Pina</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="noPing">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <span>Não Treme Tela</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="noShake">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <span>Não Passa da Cabeça</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="noOverhead">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="applyStabilization()">Aplicar Estabilização</button>
+            </div>
+        </div>
+
+        <div class="info-text" style="text-align: center; margin-top: 20px;">
+            <p>🔒 Sistema protegido com API | Versão 6.0 | Última atualização: 2025</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://SEU-SITE.netlify.app/.netlify/functions';
+
+        // Atualizar displays dos sliders
+        document.getElementById('btnSpeedSlider').oninput = function() {
+            document.getElementById('btnSpeed').textContent = this.value + '%';
+        };
+
+        document.getElementById('btnPrecisionSlider').oninput = function() {
+            document.getElementById('btnPrecision').textContent = this.value + '%';
+        };
+
+        document.getElementById('sensiGeneralSlider').oninput = function() {
+            document.getElementById('sensiGeneral').textContent = this.value + '%';
+        };
+
+        document.getElementById('sensiAimSlider').oninput = function() {
+            document.getElementById('sensiAim').textContent = this.value + '%';
+        };
+
+        document.getElementById('aimSmoothSlider').oninput = function() {
+            document.getElementById('aimSmooth').textContent = this.value + '%';
+        };
+
+        document.getElementById('aimFovSlider').oninput = function() {
+            document.getElementById('aimFov').textContent = this.value + '%';
+        };
+
+        document.getElementById('screenResSlider').oninput = function() {
+            const resolutions = ['720p', '1080p', '1440p'];
+            document.getElementById('screenRes').textContent = resolutions[this.value];
+        };
+
+        document.getElementById('refreshRateSlider').oninput = function() {
+            document.getElementById('refreshRate').textContent = this.value + 'Hz';
+        };
+
+        async function applyButtonCalibration() {
+            const speed = document.getElementById('btnSpeedSlider').value;
+            const precision = document.getElementById('btnPrecisionSlider').value;
+            
+            await sendToAPI('calibrateButton', { speed, precision });
+        }
+
+        async function applySensiCalibration() {
+            const general = document.getElementById('sensiGeneralSlider').value;
+            const aim = document.getElementById('sensiAimSlider').value;
+            
+            await sendToAPI('calibrateSensi', { general, aim });
+        }
+
+        async function applyAimCalibration() {
+            const smooth = document.getElementById('aimSmoothSlider').value;
+            const fov = document.getElementById('aimFovSlider').value;
+            
+            await sendToAPI('calibrateAim', { smooth, fov });
+        }
+
+        async function applyScreenCalibration() {
+            const resolution = document.getElementById('screenResSlider').value;
+            const refreshRate = document.getElementById('refreshRateSlider').value;
+            
+            await sendToAPI('calibrateScreen', { resolution, refreshRate });
+        }
+
+        async function applyAdvancedFeatures() {
+            const norecoil = document.getElementById('norecoil').checked;
+            const aimbotLegit = document.getElementById('aimbotLegit').checked;
+            const aimbotAP = document.getElementById('aimbotAP').checked;
+            
+            await sendToAPI('advancedFeatures', { norecoil, aimbotLegit, aimbotAP });
+        }
+
+        async function applyStabilization() {
+            const noPing = document.getElementById('noPing').checked;
+            const noShake = document.getElementById('noShake').checked;
+            const noOverhead = document.getElementById('noOverhead').checked;
+            
+            await sendToAPI('stabilization', { noPing, noShake, noOverhead });
+        }
+
+        async function sendToAPI(endpoint, data) {
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.textContent = '⏳ PROCESSANDO...';
+            statusBadge.style.background = '#ffaa00';
+            
+            try {
+                const response = await fetch(`${API_URL}/${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                statusBadge.textContent = '✓ APLICADO';
+                statusBadge.style.background = '#00ff88';
+                
+                setTimeout(() => {
+                    statusBadge.textContent = '● CONECTADO';
+                    statusBadge.style.background = '#00ff88';
+                }, 2000);
+                
+                console.log('Resposta:', result);
+            } catch (error) {
+                statusBadge.textContent = '✗ ERRO';
+                statusBadge.style.background = '#ff3333';
+                console.error('Erro:', error);
+                
+                setTimeout(() => {
+                    statusBadge.textContent = '● CONECTADO';
+                    statusBadge.style.background = '#00ff88';
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+  </html>
